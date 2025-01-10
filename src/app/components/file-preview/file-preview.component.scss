@@ -1,0 +1,93 @@
+:host {
+  .preview-container {
+    padding: 20px;
+    height: 100%;
+
+    @media screen and (max-width: 768px) {
+      padding: 0;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 0;
+    }
+
+    .title {
+      color: #ddd;
+    }
+  }
+
+  .loading,
+  .error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    gap: 16px;
+  }
+
+  .file-icon {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+
+    mat-icon {
+      font-size: 64px;
+      height: 64px;
+      width: 64px;
+    }
+
+    .icon-image {
+      color: #4caf50;
+    }
+
+    .icon-pdf {
+      color: #f44336;
+    }
+
+    .icon-document {
+      color: #2196f3;
+    }
+
+    .icon-spreadsheet {
+      color: #4caf50;
+    }
+
+    .icon-archive {
+      color: #795548;
+    }
+
+    .icon-default {
+      color: #757575;
+    }
+  }
+
+  .file-info {
+    margin-bottom: 20px;
+
+    h2 {
+      margin: 0 0 16px 0;
+      color: #ddd;
+    }
+  }
+
+  .preview-notice {
+    text-align: center;
+    padding: 20px;
+    background-color: #f5f5f5;
+
+    mat-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0;
+    }
+  }
+}

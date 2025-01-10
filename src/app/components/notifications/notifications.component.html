@@ -1,0 +1,19 @@
+<div class="notification-container">
+    <div *ngFor="let notification of notifications$ | async" class="notification-item" [ngClass]="notification.type">
+        <div class="notification-content">
+            <mat-icon [ngSwitch]="notification.type">
+                <ng-container *ngSwitchCase="'success'">check_circle</ng-container>
+                <ng-container *ngSwitchCase="'error'">error</ng-container>
+                <ng-container *ngSwitchCase="'warning'">warning</ng-container>
+                <ng-container *ngSwitchCase="'info'">info</ng-container>
+            </mat-icon>
+            <span class="message">{{ notification.message }}</span>
+            <button mat-icon-button (click)="removeNotification(notification.id)" class="close-button">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <span class="timestamp">
+            {{ notification.timestamp | date:'short' }}
+        </span>
+    </div>
+</div>

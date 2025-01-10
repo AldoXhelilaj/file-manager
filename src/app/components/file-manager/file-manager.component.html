@@ -1,0 +1,165 @@
+<mat-card class="file-manager">
+    <mat-card-header>
+        <mat-card-title class="file-manager-title">File Manager</mat-card-title>
+    </mat-card-header>
+
+    <div class="wrapper-panels">
+        <mat-card-content>
+            <!-- Action Buttons -->
+            <div class="actions-bar">
+                <button  mat-raised-button color="primary" (click)="createNewFolder()">
+                    <mat-icon>create_new_folder</mat-icon>
+                    New Folder
+                </button>
+                <button mat-raised-button color="accent" (click)="fileInputMain.click()">
+                    <mat-icon>upload</mat-icon>
+                    Upload File
+                </button>
+                <input type="file" #fileInputMain (change)="uploadFile($event)" style="display: none">
+
+                <!-- Batch operations toggle -->
+                <button mat-mini-fab  (click)="toggleSelectionMode()" [class.active]="isSelectionMode$ | async">
+                    <mat-icon>checklist</mat-icon>
+                </button>
+            </div>
+            <!-- <div class="batch-toolbar" *ngIf="isSelectionMode$ | async">
+                <div class="selection-info">
+                    {{ (selectedItems$ | async)?.length || 0 }} items selected
+                </div>
+                <div class="batch-actions">
+                    <button mat-button (click)="handleBatchDelete()">
+                        <mat-icon>delete</mat-icon> Delete
+                    </button>
+                    <button mat-button [matMenuTriggerFor]="moveMenu">
+                        <mat-icon>drive_file_move</mat-icon> Move to
+                    </button>
+                    <button mat-button (click)="batchService.toggleSelectionMode(false)">
+                        <mat-icon>close</mat-icon> Cancel
+                    </button>
+                </div>
+            </div> -->
+            <!-- Batch operations toolbar -->
+            <div class="batch-toolbar" *ngIf="isSelectionMode$ | async">
+                <div class="selection-info">
+                    {{ checkedNodes.size }} items selected
+                </div>
+                <div class="batch-actions">
+                    <button mat-button (click)="handleBatchDelete()">
+                        <mat-icon>delete</mat-icon> Delete
+                    </button>
+                    <button mat-button [matMenuTriggerFor]="moveMenu">
+                        <mat-icon>drive_file_move</mat-icon> Move to
+                    </button>
+                    <button  [disabled] = "checkedNodes.size !== 1" (click)="renameNode()" mat-button>
+                        <mat-icon>edit</mat-icon>
+                        <span>Rename</span>
+                    </button>
+                    <button mat-button (click)="clearNodes()">
+                        <mat-icon>close</mat-icon> Clear Selection
+                    </button>
+                </div>
+            </div>
+            <mat-menu #moveMenu="matMenu">
+                <ng-container *ngFor="let folder of getFoldersList()">
+                    <button mat-menu-item (click)="handleBatchMove(folder.id)">
+                        {{ folder.name }}
+                    </button>
+                </ng-container>
+            </mat-menu>
+
+            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" cdkDropListGroup>
+                <!-- Folder Template -->
+                <mat-tree-node  class="folder-node"
+                 *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding cdkDropList
+                    [cdkDropListData]="node" (cdkDropListDropped)="drop($event)">
+                    <!-- Drag Preview -->
+                    <div *cdkDragPreview class="drag-preview">
+                        <mat-icon>{{ getFileIcon(node.name) }}</mat-icon>
+                        <span>{{ node.name }}</span>
+                    </div>
+                    <div cdkDrag [cdkDragData]="node">
+                        <button *ngIf="hasChildren(node.level, node)" mat-icon-button matTreeNodeToggle>
+                            <mat-icon>{{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}</mat-icon>
+                        </button>
+                        <mat-icon class="type-icon">{{ node.type === 'folder' ? 'folder' : getFileIcon(node.name)
+                            }}</mat-icon>
+                        <span class="node-name">{{ node.name }}</span>
+                        <span class="file-size" *ngIf="node.type === 'file'">{{ formatFileSize(node.size) }}</span>
+                        <!-- Context Menu Trigger -->
+                        <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <!-- Context Menu -->
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="renameNode(node)">
+                                <mat-icon>edit</mat-icon>
+                                <span>Rename</span>
+                            </button>
+                            <button mat-menu-item (click)="deleteNode(node)">
+                                <mat-icon>delete</mat-icon>
+                                <span>Delete</span>
+                            </button>
+                            <button mat-menu-item *ngIf="node.type === 'folder'" (click)="createNewFolder(node.id)">
+                                <mat-icon>create_new_folder</mat-icon>
+                                <span>New Folder</span>
+                            </button>
+                            <button mat-menu-item *ngIf="node.type === 'folder'" (click)="fileInput.click()">
+                                <mat-icon>upload_file</mat-icon>
+                                <span>Upload File</span>
+                            </button>
+                            <input type="file" #fileInput (change)="uploadFile($event, node.id)" style="display: none">
+                        </mat-menu>
+                    </div>
+                </mat-tree-node>
+
+                <!-- File Template -->
+                <mat-tree-node class="folder-node"
+                 *matTreeNodeDef="let node" matTreeNodePadding cdkDropList [cdkDropListData]="node"
+                    (cdkDropListDropped)="drop($event)" (click)="selectNode(node, $event)">
+
+                    <!-- Drag Preview -->
+                    <div *cdkDragPreview class="drag-preview">
+                        <mat-icon>{{ getFileIcon(node.name) }}</mat-icon>
+                        <span>{{ node.name }}</span>
+                    </div>
+                    <div cdkDrag [cdkDragData]="node">
+                        <!-- Placeholder Button for Non-interactive Nodes -->
+                        <button mat-icon-button disabled></button>
+
+                        <!-- File Icon and Name -->
+                        <mat-icon>{{ getFileIcon(node.name) }}</mat-icon>
+                        <span class="node-name">{{ node.name }}</span>
+
+                        <!-- File Size Display -->
+                        <span class="file-size">{{ formatFileSize(node.size) }}</span>
+
+                        <mat-checkbox  [disabled]="(isSelectionMode$ | async) === false"
+                        [checked]="isChecked(node.id)" (change)="onCheckboxChange(node, $event)"
+                            (click)="$event.stopPropagation()">
+                        </mat-checkbox>
+                        <!-- Context Menu for Files -->
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="renameNode(node)">
+                                <mat-icon>edit</mat-icon>
+                                <span>Rename</span>
+                            </button>
+                            <button mat-menu-item (click)="deleteNode(node)">
+                                <mat-icon>delete</mat-icon>
+                                <span>Delete</span>
+                            </button>
+                        </mat-menu>
+                    </div>
+                </mat-tree-node>
+            </mat-tree>
+
+
+        </mat-card-content>
+
+        <mat-card-content>
+            <div class="preview-panel" *ngIf="(selectedNode$ | async)?.type === 'file'">
+                <app-file-preview></app-file-preview>
+            </div>
+        </mat-card-content>
+    </div>
+
+</mat-card>

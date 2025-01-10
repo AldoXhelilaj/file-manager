@@ -1,0 +1,230 @@
+:host {
+  .file-manager {
+    width: 100%;
+    display: flex;
+    min-height: 600px;
+    padding-bottom: 16px;
+
+    .wrapper-panels {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(2, 1fr);
+
+      @media screen and (max-width: 768px) {
+        grid-template-columns: 1fr;
+        font-size: 13px;
+      }
+    }
+
+    .file-manager-title {
+      margin-bottom: 1rem;
+      color: #ddd;
+    }
+
+    ::ng-deep .mat-mdc-mini-fab {
+      border-radius: 50px !important;
+    }
+
+    .folder-node {
+      padding: 0 1rem;
+
+      .cdk-drag {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+    }
+  }
+}
+
+
+
+.breadcrumb-nav {
+  margin-bottom: 1rem;
+}
+
+.breadcrumb {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+  content: '/';
+  margin: 0 0.5rem;
+  color: #ddd;
+}
+
+.actions-bar {
+  margin-bottom: 1rem;
+  gap: 1rem;
+  display: flex;
+}
+
+.file-list {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+
+  ::ng-deep.mat-mdc-list-item-unscoped-content {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+
+  .item-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.item-name {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.item-details {
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.selected {
+  background-color: #e3f2fd;
+}
+
+.drag-preview {
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2),
+    0 8px 10px 1px rgba(0, 0, 0, .14),
+    0 3px 14px 2px rgba(0, 0, 0, .12);
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cdk-drag-preview {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: rotate(3deg);
+  pointer-events: none;
+}
+
+.cdk-drag-preview img {
+  max-width: 150px;
+  max-height: 150px;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.5;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.mat-tree-node {
+  cursor: move;
+}
+
+::ng-deep .mat-tree {
+  padding: 10px;
+}
+
+.type-icon {
+  cursor: move;
+  margin-left: 3px;
+}
+
+
+.file-manager-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar {
+  padding: 8px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  gap: 8px;
+
+  button.active {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+
+.batch-toolbar {
+  padding: 8px 16px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+
+    .batch-actions {
+      flex-direction: column;
+    }
+  }
+
+  .selection-info {
+    font-weight: 500;
+  }
+
+  .batch-actions {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+.node-content {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  gap: 8px;
+  width: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  .node-name {
+    flex: 1;
+  }
+
+  .file-size {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 12px;
+    margin-right: 16px;
+  }
+}
+
+.selected {
+  background-color: rgba(63, 81, 181, 0.08);
+}
+
+.cdk-drag-preview {
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.3;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

@@ -1,0 +1,67 @@
+<div class="preview-container" *ngIf="fileData">
+    <mat-card-header class="preview-header">
+        <mat-card-title class="title">File Preview</mat-card-title>
+        <button mat-mini-fab  class="close-button" (click)="closePreview()">
+          <mat-icon class="material-icons">close</mat-icon>
+        </button>
+      </mat-card-header>
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="error-state">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- File Preview -->
+    <div *ngIf="!loading && !error" class="preview-content">
+      <!-- File Icon -->
+      <div class="file-icon">
+        <mat-icon [class]="getIconClass()">
+          {{ filePreviewService.getFileTypeIcon(fileData.name) }}
+        </mat-icon>
+      </div>
+
+      <!-- File Information -->
+      <mat-card class="file-info">
+        <mat-card-content>
+          <h2>{{ fileData.name }}</h2>
+          <mat-list>
+            <mat-list-item>
+              <mat-icon matListItemIcon>folder</mat-icon>
+              <div matListItemTitle>Location</div>
+              <div matListItemLine>{{ fileData.path && fileData.path.join(' / ') }}</div>
+            </mat-list-item>
+
+            <mat-divider></mat-divider>
+
+            <mat-list-item>
+              <mat-icon matListItemIcon>schedule</mat-icon>
+              <div matListItemTitle>Last Modified</div>
+              <div matListItemLine>{{ fileData.lastModified | date:'medium' }}</div>
+            </mat-list-item>
+
+            <mat-divider></mat-divider>
+
+            <mat-list-item *ngIf="fileData.size">
+              <mat-icon matListItemIcon>data_usage</mat-icon>
+              <div matListItemTitle>Size</div>
+              <div matListItemLine>{{ formatFileSize(fileData.size) }}</div>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Preview Unavailable Notice -->
+      <mat-card class="preview-notice">
+        <mat-card-content>
+          <mat-icon color="primary">info</mat-icon>
+          <p>Preview is not available in the demo mode. In a production environment, 
+             you would be able to preview the contents of this file.</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
