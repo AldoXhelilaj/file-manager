@@ -1,59 +1,160 @@
-# FileManager
+# Angular File Manager
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+A modern file management system built with Angular, featuring an intuitive interface for managing files and folders with advanced features like drag-and-drop, file preview, and real-time notifications.
 
-## Development server
+## Features
 
-To start a local development server, run:
+### Core Functionality
+- **File & Folder Management**
+  - Create, read, update, and delete files/folders
+  - Rename files and folders
+  - Move files between folders
+  - Create nested folder structures
+  - File size display
+  - File type identification with appropriate icons
 
+### Advanced Features
+- **Drag and Drop**
+  - Intuitive drag-and-drop interface
+  - Visual feedback during drag operations
+  - Validation for valid drop targets
+  - Prevents dropping folders into their own children
+
+- **Batch Operations**
+  - Multi-select files and folders
+  - Batch delete functionality
+  - Batch move operations
+  - Select/deselect all items in a folder
+
+- **File Preview**
+  - Preview panel for selected files
+  - Supports different file types (images, text, PDF)
+  - Preview panel can be toggled
+
+- **Notification System**
+  - Real-time operation feedback
+  - Success/error notifications
+  - Operation progress updates
+  - Customizable notification duration
+  - Different notification types (success, error, info, warning)
+
+### User Interface
+- **Tree View Structure**
+  - Hierarchical display of files and folders
+  - Expandable/collapsible folders
+  - Visual indication of current selection
+  - Clear parent-child relationships
+
+- **Responsive Design**
+  - Adapts to different screen sizes
+  - Mobile-friendly interface
+  - Flexible layout system
+
+## Technical Implementation
+
+### Technologies Used
+- Angular 19.0.0
+- Angular Material 19.0.4
+- Angular CDK for drag-and-drop
+- RxJS for state management
+- JSON Server for backend mock
+
+### Key Components
+- `FileManagerComponent`: Main component handling the file system display
+- `FilePreviewComponent`: Handles file preview functionality
+- `NotificationComponent`: Manages the notification system
+- `TreeViewComponent`: Implements the hierarchical file structure
+
+### Services
+- `FileSystemService`: Handles CRUD operations
+- `NotificationService`: Manages system notifications
+- `SelectionService`: Handles file/folder selection
+- `BatchOperationsService`: Manages batch operations
+
+## Getting Started
+
+### Prerequisites
+- Node.js (latest LTS version)
+- npm (comes with Node.js)
+- Angular CLI (`npm install -g @angular/cli`)
+
+### Installation
+
+1. Clone the repository:
 ```bash
-ng serve
+git clone [repository-url]
+cd file-manager
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+2. Install dependencies:
 ```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
+3. Start the development server and JSON server:
 ```bash
-ng generate --help
+npm run start:dev
 ```
 
-## Building
+The application will be available at `http://localhost:4200`
 
-To build the project run:
+### Building for Production
 
+To build the application for production:
 ```bash
-ng build
+ng build --configuration production
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Usage Examples
 
-## Running unit tests
+### Creating a New Folder
+```typescript
+createNewFolder(parentId: string = '1') {
+  const dialogRef = this.dialog.open(NewFolderComponent, {
+    width: '400px',
+    data: { title: 'Create New Folder' }
+  });
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
+  dialogRef.afterClosed().subscribe(folderName => {
+    if (folderName) {
+      this.fileSystemService.createFolder(folderName, parentId)
+        .subscribe(() => {
+          this.loadNodes();
+        });
+    }
+  });
+}
 ```
 
-## Running end-to-end tests
+### Implementing Drag and Drop
+```typescript
+drop(event: CdkDragDrop<TreeNode>) {
+  const draggedNode = event.item.data as TreeNode;
+  const targetNode = event.container.data as TreeNode;
 
-For end-to-end (e2e) testing, run:
+  if (targetNode.type !== 'folder') return;
 
-```bash
-ng e2e
+  this.fileSystemService.updateNode(draggedNode.id, { parentId: targetNode.id })
+    .subscribe(() => {
+      this.loadNodes();
+    });
+}
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Project Structure
+```
+src/
+├── app/
+│   ├── components/
+│   │   ├── file-manager/
+│   │   ├── file-preview/
+│   │   └── notification/
+│   ├── services/
+│   │   ├── file-system.service.ts
+│   │   ├── notification.service.ts
+│   │   └── selection.service.ts
+│   └── models/
+│       └── file-system.model.ts
+├── environments/
+└── assets/
+```
