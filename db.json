@@ -330,6 +330,81 @@
         "Test Folder"
       ],
       "lastModified": "2025-01-10T15:35:25.769Z"
+    },
+    {
+      "id": "be2c",
+      "name": "Screenshot (1).png",
+      "type": "file",
+      "parentId": "625d",
+      "size": 970328,
+      "path": [
+        "Root",
+        "Test Folder",
+        "Screenshot (1).png"
+      ],
+      "lastModified": "2025-01-10T16:04:00.913Z"
+    },
+    {
+      "id": "a926",
+      "name": "Test Folder inside",
+      "type": "folder",
+      "parentId": "e9c5",
+      "path": [
+        "Root",
+        "Test Folder 2",
+        "Test Folder inside"
+      ],
+      "lastModified": "2025-01-10T16:04:45.081Z"
+    },
+    {
+      "id": "55f8",
+      "name": "FE Task Angular_.pdf",
+      "type": "file",
+      "parentId": "625d",
+      "size": 67622,
+      "path": [
+        "Root",
+        "Test Folder 2",
+        "Test Folder inside",
+        "FE Task Angular_250106_095956.pdf"
+      ],
+      "lastModified": "2025-01-10T16:07:53.921Z"
+    },
+    {
+      "id": "e483",
+      "name": "README.md",
+      "type": "file",
+      "parentId": "625d",
+      "size": 1533,
+      "path": [
+        "Root",
+        "Test Folder 2",
+        "Test Folder inside",
+        "README.md"
+      ],
+      "lastModified": "2025-01-10T16:09:00.109Z"
+    },
+    {
+      "id": "7efa",
+      "name": "Test Folder 2",
+      "type": "folder",
+      "parentId": "625d",
+      "path": [
+        "Root",
+        "Test Folder 2"
+      ],
+      "lastModified": "2025-01-10T16:12:14.818Z"
+    },
+    {
+      "id": "625d",
+      "name": "Folder 3",
+      "type": "folder",
+      "parentId": "355b",
+      "path": [
+        "Root",
+        "Folder 3"
+      ],
+      "lastModified": "2025-01-10T16:12:25.222Z"
     }
   ]
 }
