@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { FileNode } from '../models/file-system.model';
+import { environment } from '../../environments/environment';
 
 // export interface FileNode {
 //   id: string;
@@ -18,7 +19,7 @@ import { FileNode } from '../models/file-system.model';
     providedIn: 'root'
 })
 export class FilePreviewService {
-    private apiUrl = 'http://localhost:3000';
+    private apiUrl = environment.apiUrl;
 
     constructor(private http: HttpClient) { }
 

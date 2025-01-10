@@ -3,12 +3,15 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { FileNode } from '../models/file-system.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileSystemService {
-  private apiUrl = 'http://localhost:3000/nodes';
+
+    
+  private apiUrl = environment.apiUrl;
   private nodesSubject = new BehaviorSubject<FileNode[]>([]);
   nodes$ = this.nodesSubject.asObservable();
 
@@ -17,7 +20,7 @@ export class FileSystemService {
   }
 
   private loadNodes() {
-    this.http.get<FileNode[]>(this.apiUrl)
+    this.http.get<FileNode[]>(this.apiUrl + '/nodes')
       .pipe(
         catchError(this.handleError)
       )
@@ -31,7 +34,7 @@ export class FileSystemService {
   }
 
   getNodeById(id: string): Observable<FileNode> {
-    return this.http.get<FileNode>(`${this.apiUrl}/${id}`)
+    return this.http.get<FileNode>(`${this.apiUrl}/nodes/${id}`)
       .pipe(catchError(this.handleError));
   }
 
@@ -52,7 +55,7 @@ export class FileSystemService {
       lastModified: new Date().toISOString()
     };
 
-    return this.http.post<FileNode>(this.apiUrl, newFolder)
+    return this.http.post<FileNode>(this.apiUrl + '/nodes', newFolder)
       .pipe(
         tap(folder => {
           const currentNodes = this.nodesSubject.value;
@@ -74,7 +77,7 @@ export class FileSystemService {
       lastModified: new Date().toISOString()
     };
 
-    return this.http.post<FileNode>(this.apiUrl, newFile)
+    return this.http.post<FileNode>(this.apiUrl + '/nodes', newFile)
       .pipe(
         tap(fileNode => {
           const currentNodes = this.nodesSubject.value;
@@ -85,7 +88,7 @@ export class FileSystemService {
   }
 
   updateNode(id: string, updates: Partial<FileNode>): Observable<FileNode> {
-    return this.http.patch<FileNode>(`${this.apiUrl}/${id}`, updates)
+    return this.http.patch<FileNode>(`${this.apiUrl}/nodes/${id}`, updates)
       .pipe(
         tap(updatedNode => {
           const currentNodes = this.nodesSubject.value;
@@ -100,7 +103,7 @@ export class FileSystemService {
   }
 
   deleteNode(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`)
+    return this.http.delete<void>(`${this.apiUrl}/nodes/${id}`)
       .pipe(
         tap(() => {
           const currentNodes = this.nodesSubject.value;
